@@ -4,6 +4,7 @@ A note application where you can:
 - Add new notes.
 - Edit the previous notes.
 - Delete a note.
+- onLongPress method used to delete a note.
 
 ## Overview
 
