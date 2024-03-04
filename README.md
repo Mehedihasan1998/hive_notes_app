@@ -1,16 +1,12 @@
-# notes_app
+# Quick Notes
 
-A new Flutter project.
+A note application where you can:
+- Add new notes.
+- Edit the previous notes.
+- Delete a note.
 
-## Getting Started
+## Overview
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![home1](https://github.com/Mehedihasan1998/hive_notes_app/assets/56060082/1dcfd96a-c089-4c37-a0ac-d72360f2cb88) 
+![add1](https://github.com/Mehedihasan1998/hive_notes_app/assets/56060082/355bfd9f-28ac-4030-8ce9-8730b753accd)
+![edit1](https://github.com/Mehedihasan1998/hive_notes_app/assets/56060082/1618e71c-9252-4c0d-a18e-2a7ee0b07400)
