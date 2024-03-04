@@ -37,7 +37,9 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Text(data[index].title.toString()),
                                 Spacer(),
-                                IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
+                                IconButton(onPressed: (){
+                                  update(data[index], data[index].title.toString(), data[index].description.toString());
+                                }, icon: Icon(Icons.edit)),
                                 IconButton(onPressed: (){
                                   delete(data[index]);
                                 }, icon: Icon(Icons.delete)),
@@ -62,6 +64,56 @@ class _HomePageState extends State<HomePage> {
   }
   void delete(NotesModel notesModel) async{
     await notesModel.delete();
+  }
+  Future<void> update(NotesModel notesModel, String title, String description) async{
+    titleController.text = title;
+    descriptionController.text = description;
+    return showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title: Text("Edit notes"),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: titleController,
+                    decoration: InputDecoration(
+                      hintText: "title",
+                    ),
+                  ),
+                  TextFormField(
+                    controller: descriptionController,
+                    decoration: InputDecoration(
+                      hintText: "description",
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: (){
+                    titleController.clear();
+                    descriptionController.clear();
+                    Navigator.pop(context);
+                  }, child: Text("Cancel")),
+              TextButton(
+                  onPressed: (){
+                    notesModel.title = titleController.text.toString();
+                    notesModel.description = descriptionController.text.toString();
+
+                    notesModel.save();
+
+                    titleController.clear();
+                    descriptionController.clear();
+                    Navigator.pop(context);
+
+                  }, child: Text("Add")),
+            ],
+          );
+        }
+    );
   }
   Future<void> _showMyDialogue() async{
     return showDialog(
