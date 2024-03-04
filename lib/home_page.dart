@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:notes_app/boxes/boxes.dart';
 import 'package:notes_app/model/notes_model.dart';
@@ -17,9 +18,9 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: Text("Quick Notes"),
+            title: Text("Quick Notes🖋"),
             backgroundColor: Colors.amber,
-            titleTextStyle: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            titleTextStyle: myStyle(25, Colors.white, FontWeight.bold),
             centerTitle: true,
           ),
           body: ValueListenableBuilder<Box<NotesModel>>(
@@ -29,16 +30,21 @@ class _HomePageState extends State<HomePage> {
               // so that you can find them index wise
               var data = box.values.toList().cast<NotesModel>();
               return ListView.builder(
+                reverse: true,
+                shrinkWrap: true,
                 itemCount: box.length,
                   itemBuilder: (context, index){
                     return InkWell(
                       onTap: (){
                         update(data[index], data[index].title.toString(), data[index].description.toString());
+
                       },
                       onLongPress: (){
                         _deleteDialogue(data[index]);
                       },
                       child: Card(
+                        color: Colors.amber.shade100,
+                        elevation: 2,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
                           child: Column(
@@ -47,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Row(
                                 children: [
-                                  Text(data[index].title.toString(), style: TextStyle(fontSize: 25, color: Colors.green, ),),
+                                  Text(data[index].title.toString(), style: myStyle(35, Colors.green),),
                                   Spacer(),
                                   IconButton(onPressed: (){
                                     update(data[index], data[index].title.toString(), data[index].description.toString());
@@ -58,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                                   }, icon: Icon(Icons.delete, color: Colors.red,)),
                                 ],
                               ),
-                              Text(data[index].description.toString()),
+                              Text(data[index].description.toString(), style: myStyle2(15)),
                             ],
                           ),
                         ),
@@ -193,6 +199,8 @@ class _HomePageState extends State<HomePage> {
             actions: [
               TextButton(
                   onPressed: (){
+                    titleController.clear();
+                    descriptionController.clear();
                     Navigator.pop(context);
                   }, child: Text("Cancel")),
               TextButton(
@@ -217,6 +225,20 @@ class _HomePageState extends State<HomePage> {
             ],
           );
         }
+    );
+  }
+  myStyle(double fs, [Color ?clr, FontWeight ?fw,]){
+    return GoogleFonts.dancingScript(
+        fontSize: fs,
+        color: clr,
+        fontWeight: fw
+    );
+  }
+  myStyle2(double fs, [Color ?clr, FontWeight ?fw,]){
+    return GoogleFonts.poppins(
+        fontSize: fs,
+        color: clr,
+        fontWeight: fw
     );
   }
 }
