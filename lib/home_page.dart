@@ -16,7 +16,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          appBar: AppBar(title: Text("Notes App"), backgroundColor: Colors.blue,),
+          appBar: AppBar(
+            title: Text("Quick Notes"),
+            backgroundColor: Colors.amber,
+            titleTextStyle: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            centerTitle: true,
+          ),
           body: ValueListenableBuilder<Box<NotesModel>>(
             valueListenable: Boxes.getData().listenable(),
             builder: (context, box, _){
@@ -26,27 +31,36 @@ class _HomePageState extends State<HomePage> {
               return ListView.builder(
                 itemCount: box.length,
                   itemBuilder: (context, index){
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(data[index].title.toString()),
-                                Spacer(),
-                                IconButton(onPressed: (){
-                                  update(data[index], data[index].title.toString(), data[index].description.toString());
-                                }, icon: Icon(Icons.edit)),
-                                IconButton(onPressed: (){
-                                  delete(data[index]);
-                                }, icon: Icon(Icons.delete)),
-                              ],
-                            ),
-                            Text(data[index].description.toString()),
-                          ],
+                    return InkWell(
+                      onTap: (){
+                        update(data[index], data[index].title.toString(), data[index].description.toString());
+                      },
+                      onLongPress: (){
+                        _deleteDialogue(data[index]);
+                      },
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(data[index].title.toString(), style: TextStyle(fontSize: 25, color: Colors.green, ),),
+                                  Spacer(),
+                                  IconButton(onPressed: (){
+                                    update(data[index], data[index].title.toString(), data[index].description.toString());
+                                  }, icon: Icon(Icons.edit, color: Colors.blue,)),
+                                  IconButton(onPressed: (){
+                                    // delete(data[index]);
+                                    _deleteDialogue(data[index]);
+                                  }, icon: Icon(Icons.delete, color: Colors.red,)),
+                                ],
+                              ),
+                              Text(data[index].description.toString()),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -58,7 +72,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: () async {
                 _showMyDialogue();
               },
-            child: Icon(Icons.add),
+            backgroundColor: Colors.amber,
+            child: Icon(Icons.add, color: Colors.white, size: 30,),
           ),
         ));
   }
@@ -84,6 +99,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   TextFormField(
                     controller: descriptionController,
+                    maxLines: 10,
                     decoration: InputDecoration(
                       hintText: "description",
                     ),
@@ -115,6 +131,40 @@ class _HomePageState extends State<HomePage> {
         }
     );
   }
+  Future<void> _deleteDialogue(NotesModel notesModel) async{
+    return showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title: Text("Delete!!!"),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text("Do you want to delete this note?")
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: (){
+                    delete(notesModel);
+                    titleController.clear();
+                    descriptionController.clear();
+                    Navigator.pop(context);
+
+                  }, child: Text("Yes")
+              ),
+              TextButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  }, child: Text("No")
+              ),
+
+            ],
+          );
+        }
+    );
+  }
   Future<void> _showMyDialogue() async{
     return showDialog(
         context: context,
@@ -132,6 +182,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   TextFormField(
                     controller: descriptionController,
+                    maxLines: 10,
                     decoration: InputDecoration(
                       hintText: "description",
                     ),
